@@ -1,0 +1,6 @@
+.ccls
+.ccls-cache
+*.make
+Makefile
+bin
+bin-int
