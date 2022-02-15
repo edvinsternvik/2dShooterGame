@@ -2,7 +2,7 @@ workspace "2dShooterGame"
 	architecture "x64"
 	startproject "2dShooterGame"
 
-	configurations { "Release" }
+	configurations { "Debug", "Release" }
 
 include "vendor/glew"
 include "vendor/glfw"
@@ -24,7 +24,7 @@ project "2dShooterGame"
 	includedirs {
 		"vendor/glew/glew/include",
 		"vendor/glfw/glfw/include",
-		"vendor/glm/glm/include"
+		"vendor/glm/glm"
 	}
 
 	links {
@@ -40,6 +40,10 @@ project "2dShooterGame"
             "GL",
             "pthread"
         }
+
+	filter "configurations:Debug"
+		symbols "On"
+		runtime "Debug"
 
 	filter "configurations:Release"
 		optimize "On"
