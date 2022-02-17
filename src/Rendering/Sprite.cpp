@@ -7,10 +7,10 @@
 #include <GL/glew.h>
 
 float vertexData[] {
-    0.0, 0.0,
-    1.0, 0.0,
-    1.0, 1.0,
-    0.0, 1.0
+    0.0, 0.0, 0.0, 0.0,
+    1.0, 0.0, 1.0, 0.0,
+    1.0, 1.0, 1.0, 1.0,
+    0.0, 1.0, 0.0, 1.0
 };
 
 unsigned int indexData[] {
@@ -19,7 +19,7 @@ unsigned int indexData[] {
 
 class SpriteData {
 public:
-    SpriteData() : vao(), vbo({VertexAttribute(2, VertexAttributeType::FLOAT, false)}), ibo() {
+    SpriteData() : vao(), vbo({VertexAttribute(2, VertexAttributeType::FLOAT, false), VertexAttribute(2, VertexAttributeType::FLOAT, false)}), ibo() {
         vao.bind();
 
         vbo.setData(vertexData, sizeof(vertexData), BufferDataUsage::STATIC_DRAW);

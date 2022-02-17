@@ -3,8 +3,13 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <memory>
+#include <iostream>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
 #include "Rendering/Shader.h"
+#include "Rendering/Texture.h"
 #include "Rendering/Sprite.h"
 
 std::string loadFile(const char* filename) {
@@ -41,6 +46,14 @@ int main(void) {
     float angle = 0.0;
     glm::vec2 pos(0.0, 0.0);
     Sprite sprite;
+
+    int spriteX, spriteY, channels;
+    unsigned char* spriteData = stbi_load("assets/sprites/grass.png", &spriteX, &spriteY, &channels, 4);
+    if(spriteData == nullptr) std::cout << "Error loading grass.png" << std::endl;
+    std::shared_ptr<Texture> spriteTexture = std::make_shared<Texture>();
+    spriteTexture->bind();
+    spriteTexture->textureImage2D(TextureFormat::RGBA, 16, 16, spriteData);
+    spriteTexture->setFilterMode(TextureFilterMode::NEAREST);
 
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT);
