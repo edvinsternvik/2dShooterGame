@@ -7,3 +7,6 @@
 [submodule "vendor/glm/glm"]
 	path = vendor/glm/glm
 	url = git@github.com-RedE01:g-truc/glm.git
+[submodule "vendor/stb"]
+	path = vendor/stb
+	url = git@github.com-RedE01:nothings/stb.git

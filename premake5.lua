@@ -24,7 +24,8 @@ project "2dShooterGame"
 	includedirs {
 		"vendor/glew/glew/include",
 		"vendor/glfw/glfw/include",
-		"vendor/glm/glm"
+		"vendor/glm/glm",
+        "vendor"
 	}
 
 	links {
