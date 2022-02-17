@@ -7,6 +7,6 @@ class Sprite {
 public:
     Sprite();
 
-    void render(glm::vec2 pos, float angle, Shader* shader);
-    void render(glm::vec2 pos, Shader* shader);
+    void render(glm::vec2 pos, float scale, float angle, Shader* shader);
+    void render(glm::vec2 pos, float scale, Shader* shader);
 };
