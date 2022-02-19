@@ -13,6 +13,7 @@
 #include "Rendering/Sprite.h"
 #include "Spritesheet.h"
 #include "Tileset.h"
+#include "Input.h"
 
 std::string loadFile(const char* filename) {
     std::ifstream file(filename);
@@ -30,6 +31,7 @@ int main(void) {
         return -1;
     }
 
+    glfwWindowHint(GLFW_RESIZABLE, false);
     window = glfwCreateWindow(1280, 720, "2dShooterGame", NULL, NULL);
     if (!window) {
         glfwTerminate();
@@ -41,6 +43,8 @@ int main(void) {
     if(glewInit() != GLEW_OK) {
         return -1;
     }
+
+    glfwSetKeyCallback(window, Input::inputCallback);
 
     Shader shader(loadFile("assets/shaders/vertexShader.glsl").c_str(), loadFile("assets/shaders/fragmentShader.glsl").c_str());
     shader.useShader();
@@ -69,8 +73,7 @@ int main(void) {
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        tileset.render(&shader);
-
+        Input::update();
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
