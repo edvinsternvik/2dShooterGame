@@ -15,7 +15,8 @@ bool Input::KeyPressed(Key key) {
 
 void Input::inputCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if(key >= 0 && key < KEY_MAX) {
-        m_keys[key] = action == GLFW_PRESS;
+        if(action == GLFW_PRESS) m_keys[key] = true;
+        if(action == GLFW_RELEASE) m_keys[key] = false;
     }
 }
 
