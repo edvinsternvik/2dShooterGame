@@ -5,15 +5,16 @@
 #include <sstream>
 #include <memory>
 #include <iostream>
+#include <chrono>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
 #include "Rendering/Shader.h"
 #include "Rendering/Texture.h"
 #include "Rendering/Sprite.h"
 #include "Spritesheet.h"
 #include "Tileset.h"
 #include "Input.h"
+#include "Player.h"
+#include "TextureLoader.h"
 
 std::string loadFile(const char* filename) {
     std::ifstream file(filename);
@@ -46,23 +47,11 @@ int main(void) {
 
     glfwSetKeyCallback(window, Input::inputCallback);
 
-    Shader shader(loadFile("assets/shaders/vertexShader.glsl").c_str(), loadFile("assets/shaders/fragmentShader.glsl").c_str());
-    shader.useShader();
+    Shader tilemapShader(loadFile("assets/shaders/tilemapVertexShader.glsl").c_str(), loadFile("assets/shaders/tilemapFragmentShader.glsl").c_str());
+    Shader spriteShader(loadFile("assets/shaders/spriteVertexShader.glsl").c_str(), loadFile("assets/shaders/spriteFragmentShader.glsl").c_str());
 
-    float angle = 0;
-    glm::vec2 pos(0.0, 0.0);
-    //Sprite sprite;
-
-    stbi_set_flip_vertically_on_load(true);
-    int spriteX, spriteY, channels;
-    unsigned char* spriteData = stbi_load("assets/sprites/spritesheet.png", &spriteX, &spriteY, &channels, 4);
-    if(spriteData == nullptr) std::cout << "Error loading spritesheet.png" << std::endl;
-    std::shared_ptr<Texture> spriteTexture = std::make_shared<Texture>();
-    spriteTexture->bind();
-    spriteTexture->textureImage2D(TextureFormat::RGBA, spriteX, spriteY, spriteData);
-    spriteTexture->setFilterMode(TextureFilterMode::NEAREST);
-
-    std::shared_ptr<Spritesheet> spritesheet = std::make_shared<Spritesheet>(spriteTexture, 8, 8);
+    std::shared_ptr<Texture> spritesheetTexture = loadTextureFromFile("assets/sprites/spritesheet.png");
+    std::shared_ptr<Spritesheet> spritesheet = std::make_shared<Spritesheet>(spritesheetTexture, 8, 8);
     Tileset<320, 180> tileset(spritesheet);
     for(int x = 0; x < 320; x++) {
         for(int y = 0; y < 180; ++y) {
@@ -70,8 +59,23 @@ int main(void) {
         }
     }
 
+    std::shared_ptr<Texture> playerTexture = loadTextureFromFile("assets/sprites/player.png");
+    Player player(playerTexture);
+
+    std::chrono::high_resolution_clock::time_point frameTimePoint = std::chrono::high_resolution_clock::now();
+    std::chrono::high_resolution_clock::time_point prevFrameTimePoint;
+
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT);
+        prevFrameTimePoint = frameTimePoint;
+        frameTimePoint = std::chrono::high_resolution_clock::now();
+        float deltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(frameTimePoint - prevFrameTimePoint).count() * 0.000000001;
+
+        player.update(deltaTime);
+
+        tileset.render(&tilemapShader);
+
+        player.getSprite()->render(player.pos, 1.0, &spriteShader);
 
         Input::update();
         glfwSwapBuffers(window);

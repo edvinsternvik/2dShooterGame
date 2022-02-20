@@ -2,7 +2,6 @@
 layout (location = 0) in vec2 a_Pos;
 layout (location = 1) in vec2 a_TextureCoords;
 
-uniform mat3 u_transformMatrix;
 uniform vec2 u_spriteOffsets[256];
 uniform vec2 u_tileScale;
 uniform vec2 u_spriteScale;
