@@ -15,6 +15,7 @@
 #include "Input.h"
 #include "Player.h"
 #include "TextureLoader.h"
+#include "EntityManager.h"
 
 std::string loadFile(const char* filename) {
     std::ifstream file(filename);
@@ -59,9 +60,11 @@ int main(void) {
         }
     }
 
+    EntityManager entityManager;
+
     std::shared_ptr<Sprite> playerSprite = std::make_shared<Sprite>("assets/sprites/player.png");
-    Player player;
-    player.setSprite(playerSprite);
+    entityID playerID = entityManager.create<Player>();
+    entityManager.getEntity(playerID)->setSprite(playerSprite);
 
     std::chrono::high_resolution_clock::time_point frameTimePoint = std::chrono::high_resolution_clock::now();
     std::chrono::high_resolution_clock::time_point prevFrameTimePoint;
@@ -72,11 +75,11 @@ int main(void) {
         frameTimePoint = std::chrono::high_resolution_clock::now();
         float deltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(frameTimePoint - prevFrameTimePoint).count() * 0.000000001;
 
-        player.update(deltaTime);
+        entityManager.updateEntities(deltaTime);
 
         tileset.render(&tilemapShader);
 
-        player.render(&spriteShader);
+        entityManager.renderEntities(&spriteShader);
 
         Input::update();
         glfwSwapBuffers(window);

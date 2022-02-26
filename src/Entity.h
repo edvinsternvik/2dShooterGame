@@ -18,5 +18,8 @@ public:
 
 private:
     std::shared_ptr<Sprite> m_entitySprite;
+    bool m_destroyed;
+
+    friend class EntityManager;
 };
 

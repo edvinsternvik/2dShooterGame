@@ -1,6 +1,7 @@
 #include "Entity.h"
 
-Entity::Entity() : pos(0) {
+Entity::Entity()
+    : pos(0), m_destroyed(false) {
 
 }
 
