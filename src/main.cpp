@@ -16,6 +16,9 @@
 #include "Player.h"
 #include "TextureLoader.h"
 #include "EntityManager.h"
+#include "CollisionManager.h"
+#include "Wall.h"
+#include "Bullet.h"
 
 std::string loadFile(const char* filename) {
     std::ifstream file(filename);
@@ -61,10 +64,28 @@ int main(void) {
     }
 
     EntityManager entityManager;
+    CollisionManager collisionManager;
 
     std::shared_ptr<Sprite> playerSprite = std::make_shared<Sprite>("assets/sprites/player.png");
     entityID playerID = entityManager.create<Player>();
-    entityManager.getEntity(playerID)->setSprite(playerSprite);
+    Player* player = entityManager.getEntity<Player>(playerID);
+    player->setSprite(playerSprite);
+    collisionManager.registerCollider(player->boxCollider);
+
+    Wall* wallBottom = entityManager.getEntity<Wall>(entityManager.create<Wall>(glm::vec2(0, -1), glm::vec2(20, 1)));
+    collisionManager.registerCollider(wallBottom->boxCollider);
+    Wall* wallLeft = entityManager.getEntity<Wall>(entityManager.create<Wall>(glm::vec2(-1, 0), glm::vec2(1, 12)));
+    collisionManager.registerCollider(wallLeft->boxCollider);
+    Wall* wallTop = entityManager.getEntity<Wall>(entityManager.create<Wall>(glm::vec2(0, 11), glm::vec2(20, 1)));
+    collisionManager.registerCollider(wallTop->boxCollider);
+    Wall* wallRight = entityManager.getEntity<Wall>(entityManager.create<Wall>(glm::vec2(20, 0), glm::vec2(1, 12)));
+    collisionManager.registerCollider(wallRight->boxCollider);
+
+    std::shared_ptr<Sprite> bulletSprite = std::make_shared<Sprite>("assets/sprites/bullet.png");
+    Bullet* bullet = entityManager.getEntity<Bullet>(entityManager.create<Bullet>());
+    bullet->pos = glm::vec2(5, 5);
+    bullet->setSprite(bulletSprite);
+    collisionManager.registerCollider(bullet->boxCollider);
 
     std::chrono::high_resolution_clock::time_point frameTimePoint = std::chrono::high_resolution_clock::now();
     std::chrono::high_resolution_clock::time_point prevFrameTimePoint;
@@ -76,6 +97,7 @@ int main(void) {
         float deltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(frameTimePoint - prevFrameTimePoint).count() * 0.000000001;
 
         entityManager.updateEntities(deltaTime);
+        collisionManager.checkCollisions();
 
         tileset.render(&tilemapShader);
 

@@ -1,13 +1,17 @@
 #pragma once
-#include "Entity.h"
 #include "BoxCollider.h"
+#include "Entity.h"
 #include <memory>
 
-class Player : public Entity {
+class Bullet : public Entity {
 public:
-    Player();
+    Bullet();
     virtual void update(float deltaTime) override;
+
+private:
+    void collisionCallback(BoxCollider* other);
 
 public:
     std::shared_ptr<BoxCollider> boxCollider;
 };
+

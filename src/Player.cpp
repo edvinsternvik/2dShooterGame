@@ -1,6 +1,10 @@
 #include "Player.h"
 #include "Input.h"
 
+Player::Player() 
+    : boxCollider(std::make_shared<BoxCollider>(true)) {
+}
+
 void Player::update(float deltaTime) {
     float speed = 8.0;
     if(Input::KeyDown(Key::KEY_W)) pos.y += speed * deltaTime;
@@ -12,4 +16,6 @@ void Player::update(float deltaTime) {
     if(pos.x > 19) pos.x = 19;
     if(pos.y < 0) pos.y = 0;
     if(pos.y > 10.25) pos.y = 10.25;
+
+    boxCollider->updatePos(pos, glm::vec2(1.0, 1.0));
 }
