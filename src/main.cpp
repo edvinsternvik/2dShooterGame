@@ -59,8 +59,9 @@ int main(void) {
         }
     }
 
-    std::shared_ptr<Texture> playerTexture = loadTextureFromFile("assets/sprites/player.png");
-    Player player(playerTexture);
+    std::shared_ptr<Sprite> playerSprite = std::make_shared<Sprite>("assets/sprites/player.png");
+    Player player;
+    player.setSprite(playerSprite);
 
     std::chrono::high_resolution_clock::time_point frameTimePoint = std::chrono::high_resolution_clock::now();
     std::chrono::high_resolution_clock::time_point prevFrameTimePoint;
@@ -75,7 +76,7 @@ int main(void) {
 
         tileset.render(&tilemapShader);
 
-        player.getSprite()->render(player.pos, 1.0, &spriteShader);
+        player.render(&spriteShader);
 
         Input::update();
         glfwSwapBuffers(window);

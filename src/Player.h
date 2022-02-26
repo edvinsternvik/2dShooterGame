@@ -1,15 +1,7 @@
 #pragma once
-#include "Rendering/Sprite.h"
+#include "Entity.h"
 
-class Player {
+class Player : public Entity {
 public:
-    Player(std::shared_ptr<Texture> playerTexture);
-    void update(float deltaTime);
-    const Sprite* getSprite() const;
-
-public:
-    glm::vec2 pos;
-
-private:
-    Sprite m_playerSprite;
+    virtual void update(float deltaTime) override;
 };
