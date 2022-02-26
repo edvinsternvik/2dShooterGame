@@ -28,11 +28,13 @@ void Sprite::render(glm::vec2 pos, float scale, float angle, Shader* shader) con
         scale * m_spriteTexture->getHeight() / static_cast<float>(VIEWPORT_HEIGHT)
     );
 
+    glm::vec2 positionScale(16 / static_cast<float>(VIEWPORT_WIDTH), 16 / static_cast<float>(VIEWPORT_HEIGHT));
+    pos *= positionScale;
     if(angle == 0) {
         glm::mat3 transformMatrix(
-            spriteScale.x,                 0.0,                   0.0,
-            0.0f,                          spriteScale.y,         0.0,
-            spriteScale.x * pos.x,         spriteScale.y * pos.y, 1.0
+            spriteScale.x, 0.0,           0.0,
+            0.0f,          spriteScale.y, 0.0,
+            pos.x,         pos.y,         1.0
         );
 
         shader->setUniformMat3("u_transformMatrix", transformMatrix);
@@ -41,7 +43,7 @@ void Sprite::render(glm::vec2 pos, float scale, float angle, Shader* shader) con
         glm::mat3 transformMatrix(
             spriteScale.x *  std::cos(angle), spriteScale.x * std::sin(angle), 0.0,
             spriteScale.x * -std::sin(angle), spriteScale.y * std::cos(angle), 0.0,
-            spriteScale.x * pos.x,            spriteScale.y * pos.y,           1.0
+            pos.x,            pos.y,           1.0
         );
         shader->setUniformMat3("u_transformMatrix", transformMatrix);
     }
