@@ -1,6 +1,7 @@
 #include "Sprite.h"
 #include "Shader.h"
 #include "SpriteData.h"
+#include "../TextureLoader.h"
 #include <memory>
 #include <GL/glew.h>
 
@@ -12,6 +13,10 @@ static std::unique_ptr<SpriteData> spriteData;
 Sprite::Sprite(std::shared_ptr<Texture> spriteTexture)
     : m_spriteTexture(spriteTexture) {
     if(spriteData.get() == nullptr) spriteData = std::make_unique<SpriteData>();
+}
+
+Sprite::Sprite(const char* spriteFilepath)
+    : Sprite(loadTextureFromFile(spriteFilepath)) {
 }
 
 void Sprite::render(glm::vec2 pos, float scale, float angle, Shader* shader) const {
