@@ -7,6 +7,7 @@ class Shader;
 class Entity {
 public:
     Entity();
+    virtual ~Entity();
     virtual void update(float deltaTime);
     void render(Shader* shader);
 
