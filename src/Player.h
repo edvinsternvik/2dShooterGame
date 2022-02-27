@@ -14,4 +14,5 @@ public:
 
 private:
     std::shared_ptr<Sprite> m_bulletSprite;
+    float m_bulletCooldown;
 };

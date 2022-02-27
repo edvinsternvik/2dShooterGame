@@ -14,7 +14,7 @@ Bullet::Bullet()
 }
 
 void Bullet::update(float deltaTime) {
-    float bulletSpeed = 10.0;
+    float bulletSpeed = 16.0;
     pos.x += deltaTime * bulletSpeed * std::cos(dir);
     pos.y += deltaTime * bulletSpeed * std::sin(dir);
 

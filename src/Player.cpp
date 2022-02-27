@@ -4,8 +4,9 @@
 #include "Bullet.h"
 
 Player::Player() 
-    : dir(0.0), boxCollider(std::make_shared<BoxCollider>(true)), m_bulletSprite(std::make_shared<Sprite>("assets/sprites/bullet.png")) {
+    : dir(0.0), boxCollider(std::make_shared<BoxCollider>(true)), m_bulletSprite(std::make_shared<Sprite>("assets/sprites/bullet.png")), m_bulletCooldown(0) {
 
+    boxCollider->collisionLayer = 1;
     Game::collisionManager.registerCollider(boxCollider);
 }
 
@@ -23,12 +24,16 @@ void Player::update(float deltaTime) {
 
     glm::vec2 cursorPos = Input::GetCursorPos();
     glm::vec2 cursorPosWorldSpace = glm::vec2(cursorPos.x, 1.0 - cursorPos.y) * glm::vec2(320 / 16.0, 180 / 16.0);
+    glm::vec2 cursorDir = glm::normalize(cursorPosWorldSpace - (pos + glm::vec2(0.5, 0.5)));
 
-    if(Input::KeyPressed(Key::KEY_SPACE)) {
+    if(m_bulletCooldown > 0) m_bulletCooldown -= deltaTime;
+    if(Input::KeyDown(Key::KEY_SPACE) && m_bulletCooldown <= 0.0) {
+        m_bulletCooldown = 0.05;
+
         Bullet* bullet = Game::entityManager.getEntity<Bullet>(Game::entityManager.create<Bullet>());
         bullet->setSprite(m_bulletSprite);
-        bullet->pos = pos + glm::vec2(1.125, 0.375);
-        bullet->dir = 0.0;
+        bullet->pos = pos + glm::vec2(0.375, 0.375) + 0.75f * cursorDir;
+        bullet->dir = glm::atan(cursorDir.y, cursorDir.x);
     }
     boxCollider->updatePos(pos, glm::vec2(1.0, 1.0));
 }
