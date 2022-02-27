@@ -26,7 +26,9 @@ void Input::inputCallback(GLFWwindow* window, int key, int scancode, int action,
 }
 
 void Input::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
-    m_cursorPos = glm::vec2(xpos, ypos);
+    glm::ivec2 windowSize;
+    glfwGetFramebufferSize(window, &windowSize.x, &windowSize.y);
+    m_cursorPos = glm::vec2(xpos, ypos) / glm::vec2(windowSize);
 }
 
 void Input::update() {
