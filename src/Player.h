@@ -9,5 +9,9 @@ public:
     virtual void update(float deltaTime) override;
 
 public:
+    float dir;
     std::shared_ptr<BoxCollider> boxCollider;
+
+private:
+    std::shared_ptr<Sprite> m_bulletSprite;
 };

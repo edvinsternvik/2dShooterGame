@@ -12,6 +12,7 @@ private:
     void collisionCallback(BoxCollider* other);
 
 public:
+    float dir;
     std::shared_ptr<BoxCollider> boxCollider;
 };
 

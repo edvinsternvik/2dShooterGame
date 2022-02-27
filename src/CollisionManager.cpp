@@ -1,5 +1,4 @@
 #include "CollisionManager.h"
-#include <iostream>
 
 std::shared_ptr<BoxCollider> CollisionManager::registerCollider(std::shared_ptr<BoxCollider> collider) {
     m_colliders.push_back(collider);
