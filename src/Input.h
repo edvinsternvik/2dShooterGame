@@ -1,4 +1,5 @@
 #pragma once
+#include <glm/glm.hpp>
 
 class GLFWwindow;
 
@@ -133,11 +134,14 @@ class Input {
 public:
     static bool KeyDown(Key key);
     static bool KeyPressed(Key key);
+    static glm::vec2 GetCursorPos();
 
     static void inputCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+    static void cursorCallback(GLFWwindow* window, double xpos, double ypos);
     static void update();
 
 private:
     static bool m_keys[KEY_MAX];
     static bool m_keysPrev[KEY_MAX];
+    static glm::vec2 m_cursorPos;
 };

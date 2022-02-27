@@ -50,6 +50,7 @@ int main(void) {
     }
 
     glfwSetKeyCallback(window, Input::inputCallback);
+    glfwSetCursorPosCallback(window, Input::cursorCallback);
 
     Shader tilemapShader(loadFile("assets/shaders/tilemapVertexShader.glsl").c_str(), loadFile("assets/shaders/tilemapFragmentShader.glsl").c_str());
     Shader spriteShader(loadFile("assets/shaders/spriteVertexShader.glsl").c_str(), loadFile("assets/shaders/spriteFragmentShader.glsl").c_str());
