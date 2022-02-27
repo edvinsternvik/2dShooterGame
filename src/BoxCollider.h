@@ -12,6 +12,7 @@ public:
 
 public:
     bool isStatic;
+    unsigned int collisionLayer;
     glm::vec2 bottomLeft;
     glm::vec2 topRight;
 

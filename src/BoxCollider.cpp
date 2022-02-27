@@ -5,7 +5,7 @@ BoxCollider::BoxCollider() : BoxCollider(true) {
 }
 
 BoxCollider::BoxCollider(bool isStatic) 
-    : isStatic(isStatic) {
+    : isStatic(isStatic), collisionLayer(0) {
 }
 
 void BoxCollider::updatePos(const glm::vec2& pos, const glm::vec2& size) {

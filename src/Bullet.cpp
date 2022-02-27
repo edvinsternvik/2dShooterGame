@@ -9,6 +9,7 @@ Bullet::Bullet()
     };
 
     boxCollider->setCollisionCallback(callbackFn);
+    boxCollider->collisionLayer = 3;
     Game::collisionManager.registerCollider(boxCollider);
 }
 

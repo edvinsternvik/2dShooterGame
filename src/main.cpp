@@ -65,6 +65,13 @@ int main(void) {
         }
     }
 
+    // 0: Enviroment
+    // 1: Player
+    // 2: Enemies
+    // 3: Bullets
+    Game::collisionManager.setLayerCount(8);
+    Game::collisionManager.setLayerCollision(0, 3, true);
+
     std::shared_ptr<Sprite> playerSprite = std::make_shared<Sprite>("assets/sprites/player.png");
     entityID playerID = Game::entityManager.create<Player>();
     Player* player = Game::entityManager.getEntity<Player>(playerID);
