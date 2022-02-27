@@ -13,12 +13,12 @@ public:
 
     void setSprite(std::shared_ptr<Sprite> sprite);
     const Sprite* getSprite() const;
+    glm::vec2 getPos() const;
+    virtual void setPos(glm::vec2 newPos);
     void markDestroyed();
 
-public:
-    glm::vec2 pos;
-
 private:
+    glm::vec2 m_pos;
     std::shared_ptr<Sprite> m_entitySprite;
     bool m_destroyed;
 

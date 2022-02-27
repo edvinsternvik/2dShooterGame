@@ -1,7 +1,7 @@
 #include "Entity.h"
 
 Entity::Entity()
-    : pos(0), m_destroyed(false) {
+    : m_pos(0), m_destroyed(false) {
 
 }
 
@@ -13,7 +13,7 @@ void Entity::update(float deltaTime) {
 
 void Entity::render(Shader* shader) {
     if(getSprite() != nullptr) {
-        getSprite()->render(pos, 1.0, shader);
+        getSprite()->render(getPos(), 1.0, shader);
     }
 }
 
@@ -23,6 +23,14 @@ void Entity::setSprite(std::shared_ptr<Sprite> sprite) {
 
 const Sprite* Entity::getSprite() const {
     return m_entitySprite.get();
+}
+
+glm::vec2 Entity::getPos() const {
+    return m_pos;
+}
+
+void Entity::setPos(glm::vec2 newPos) {
+    m_pos = newPos;
 }
 
 void Entity::markDestroyed() {

@@ -12,19 +12,21 @@ Player::Player()
 
 void Player::update(float deltaTime) {
     float speed = 8.0;
-    if(Input::KeyDown(Key::KEY_W)) pos.y += speed * deltaTime;
-    if(Input::KeyDown(Key::KEY_S)) pos.y -= speed * deltaTime;
-    if(Input::KeyDown(Key::KEY_A)) pos.x -= speed * deltaTime;
-    if(Input::KeyDown(Key::KEY_D)) pos.x += speed * deltaTime;
+    glm::vec2 newPos = getPos();
+    if(Input::KeyDown(Key::KEY_W)) newPos.y += speed * deltaTime;
+    if(Input::KeyDown(Key::KEY_S)) newPos.y -= speed * deltaTime;
+    if(Input::KeyDown(Key::KEY_A)) newPos.x -= speed * deltaTime;
+    if(Input::KeyDown(Key::KEY_D)) newPos.x += speed * deltaTime;
 
-    if(pos.x < 0) pos.x = 0;
-    if(pos.x > 19) pos.x = 19;
-    if(pos.y < 0) pos.y = 0;
-    if(pos.y > 10.25) pos.y = 10.25;
+    if(newPos.x < 0) newPos.x = 0;
+    if(newPos.x > 19) newPos.x = 19;
+    if(newPos.y < 0) newPos.y = 0;
+    if(newPos.y > 10.25) newPos.y = 10.25;
+    setPos(newPos);
 
     glm::vec2 cursorPos = Input::GetCursorPos();
     glm::vec2 cursorPosWorldSpace = glm::vec2(cursorPos.x, 1.0 - cursorPos.y) * glm::vec2(320 / 16.0, 180 / 16.0);
-    glm::vec2 cursorDir = glm::normalize(cursorPosWorldSpace - (pos + glm::vec2(0.5, 0.5)));
+    glm::vec2 cursorDir = glm::normalize(cursorPosWorldSpace - (getPos() + glm::vec2(0.5, 0.5)));
 
     if(m_bulletCooldown > 0) m_bulletCooldown -= deltaTime;
     if(Input::KeyDown(Key::KEY_SPACE) && m_bulletCooldown <= 0.0) {
@@ -32,8 +34,12 @@ void Player::update(float deltaTime) {
 
         Bullet* bullet = Game::entityManager.getEntity<Bullet>(Game::entityManager.create<Bullet>());
         bullet->setSprite(m_bulletSprite);
-        bullet->pos = pos + glm::vec2(0.375, 0.375) + 0.75f * cursorDir;
+        bullet->setPos(getPos() + glm::vec2(0.375, 0.375) + 0.75f * cursorDir);
         bullet->dir = glm::atan(cursorDir.y, cursorDir.x);
     }
-    boxCollider->updatePos(pos, glm::vec2(1.0, 1.0));
+}
+
+void Player::setPos(glm::vec2 newPos) {
+    Entity::setPos(newPos);
+    boxCollider->updatePos(getPos(), glm::vec2(1.0, 1.0));
 }

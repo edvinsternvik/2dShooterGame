@@ -7,6 +7,7 @@ class Player : public Entity {
 public:
     Player();
     virtual void update(float deltaTime) override;
+    virtual void setPos(glm::vec2 newPos) override;
 
 public:
     float dir;

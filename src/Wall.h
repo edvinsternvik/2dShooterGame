@@ -9,7 +9,7 @@ public:
     Wall(glm::vec2 pos, glm::vec2 size)
         : boxCollider(std::make_shared<BoxCollider>(true)) {
 
-        this->pos = pos;
+        setPos(pos);
         boxCollider->updatePos(pos, size);
         Game::collisionManager.registerCollider(boxCollider);
     }
