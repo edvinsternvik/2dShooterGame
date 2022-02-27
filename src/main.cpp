@@ -20,6 +20,7 @@
 #include "Wall.h"
 #include "Bullet.h"
 #include "Game.h"
+#include "Enemy.h"
 
 std::string loadFile(const char* filename) {
     std::ifstream file(filename);
@@ -71,6 +72,7 @@ int main(void) {
     // 3: Bullets
     Game::collisionManager.setLayerCount(8);
     Game::collisionManager.setLayerCollision(0, 3, true);
+    Game::collisionManager.setLayerCollision(2, 3, true);
 
     std::shared_ptr<Sprite> playerSprite = std::make_shared<Sprite>("assets/sprites/player.png");
     entityID playerID = Game::entityManager.create<Player>();
@@ -81,6 +83,17 @@ int main(void) {
     Wall* wallLeft = Game::entityManager.getEntity<Wall>(Game::entityManager.create<Wall>(glm::vec2(-1, 0), glm::vec2(1, 12)));
     Wall* wallTop = Game::entityManager.getEntity<Wall>(Game::entityManager.create<Wall>(glm::vec2(0, 11), glm::vec2(20, 1)));
     Wall* wallRight = Game::entityManager.getEntity<Wall>(Game::entityManager.create<Wall>(glm::vec2(20, 0), glm::vec2(1, 12)));
+
+    std::shared_ptr<Sprite> enemySprite = std::make_shared<Sprite>("assets/sprites/player.png");
+    Enemy* enemy1 = Game::entityManager.getEntity<Enemy>(Game::entityManager.create<Enemy>());
+    enemy1->setPos(glm::vec2(5, 5));
+    enemy1->setSprite(enemySprite);
+    Enemy* enemy2 = Game::entityManager.getEntity<Enemy>(Game::entityManager.create<Enemy>());
+    enemy2->setPos(glm::vec2(10, 2));
+    enemy2->setSprite(enemySprite);
+    Enemy* enemy3 = Game::entityManager.getEntity<Enemy>(Game::entityManager.create<Enemy>());
+    enemy3->setPos(glm::vec2(16, 4));
+    enemy3->setSprite(enemySprite);
 
     std::chrono::high_resolution_clock::time_point frameTimePoint = std::chrono::high_resolution_clock::now();
     std::chrono::high_resolution_clock::time_point prevFrameTimePoint;

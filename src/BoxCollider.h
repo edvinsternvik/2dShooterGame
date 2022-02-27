@@ -8,7 +8,7 @@ public:
     BoxCollider(bool isStatic);
     void updatePos(const glm::vec2& pos, const glm::vec2& size);
     bool isColliding(BoxCollider* other) const;
-    void setCollisionCallback(std::function<void(BoxCollider* other)>& callbackFn);
+    void setCollisionCallback(std::function<void(BoxCollider* other)> callbackFn);
 
 public:
     bool isStatic;

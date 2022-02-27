@@ -18,6 +18,6 @@ bool BoxCollider::isColliding(BoxCollider* other) const {
         && bottomLeft.y < other->topRight.y && topRight.y > other->bottomLeft.y;
 }
 
-void BoxCollider::setCollisionCallback(std::function<void(BoxCollider* other)>& callbackFn) {
+void BoxCollider::setCollisionCallback(std::function<void(BoxCollider* other)> callbackFn) {
     m_collisionCallback = callbackFn;
 }
