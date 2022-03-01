@@ -36,6 +36,8 @@ void Player::update(float deltaTime) {
         bullet->setSprite(m_bulletSprite);
         bullet->setPos(getPos() + glm::vec2(0.375, 0.375) + 0.75f * cursorDir);
         bullet->dir = glm::atan(cursorDir.y, cursorDir.x);
+        bullet->speed = 12.0;
+        bullet->boxCollider->collisionLayer = 3;
     }
 }
 

@@ -13,6 +13,7 @@ private:
     void collisionCallback(BoxCollider* other);
 
 public:
+    float speed;
     float dir;
     std::shared_ptr<BoxCollider> boxCollider;
 };
