@@ -4,9 +4,10 @@
 #include "Bullet.h"
 
 Player::Player() 
-    : dir(0.0), boxCollider(std::make_shared<BoxCollider>(true)), m_bulletSprite(std::make_shared<Sprite>("assets/sprites/bullet.png")), m_bulletCooldown(0) {
+    : dir(0.0), boxCollider(std::make_shared<BoxCollider>(true)), m_bulletSprite(std::make_shared<Sprite>("assets/sprites/bullet.png")), m_bulletCooldown(0), m_cameraShakeIntensity(0.0), m_timer(0.0) {
 
     boxCollider->collisionLayer = 1;
+    boxCollider->setCollisionCallback(std::bind(&Player::collisionCallback, this, std::placeholders::_1));
     Game::collisionManager.registerCollider(boxCollider);
 }
 
@@ -39,9 +40,18 @@ void Player::update(float deltaTime) {
         bullet->speed = 12.0;
         bullet->boxCollider->collisionLayer = 3;
     }
+
+    m_timer += deltaTime;
+    Game::cameraPos.x = m_cameraShakeIntensity * glm::sin(m_timer * 100.0);
+    Game::cameraPos.y = m_cameraShakeIntensity * glm::sin(m_timer * 100.0 + 100.0);
+    m_cameraShakeIntensity = std::max(0.0f, m_cameraShakeIntensity - deltaTime);
 }
 
 void Player::setPos(glm::vec2 newPos) {
     Entity::setPos(newPos);
     boxCollider->updatePos(getPos(), glm::vec2(1.0, 1.0));
+}
+
+void Player::collisionCallback(BoxCollider* other) {
+    m_cameraShakeIntensity = 0.01;
 }
