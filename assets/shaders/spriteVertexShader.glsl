@@ -13,6 +13,6 @@ void main() {
     
     vec3 pos = u_transformMatrix * vec3(a_pos, 1.0);
     pos += vec3(u_cameraPos, 0.0);
-    gl_Position = vec4(pos.xy * 2.0 - vec2(1.0), 0.0, 1.0);
+    gl_Position = vec4(pos.xy * 2.0 - vec2(1.0), pos.z, 1.0);
 }
 

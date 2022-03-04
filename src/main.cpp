@@ -54,6 +54,8 @@ int main(void) {
     glfwSetKeyCallback(window, Input::inputCallback);
     glfwSetCursorPosCallback(window, Input::cursorCallback);
 
+    glEnable(GL_DEPTH_TEST);
+
     Shader tilemapShader(loadFile("assets/shaders/tilemapVertexShader.glsl").c_str(), loadFile("assets/shaders/tilemapFragmentShader.glsl").c_str());
     Shader spriteShader(loadFile("assets/shaders/spriteVertexShader.glsl").c_str(), loadFile("assets/shaders/spriteFragmentShader.glsl").c_str());
 
@@ -107,7 +109,7 @@ int main(void) {
     std::chrono::high_resolution_clock::time_point prevFrameTimePoint;
 
     while (!glfwWindowShouldClose(window)) {
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         prevFrameTimePoint = frameTimePoint;
         frameTimePoint = std::chrono::high_resolution_clock::now();
         float deltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(frameTimePoint - prevFrameTimePoint).count() * 0.000000001;
@@ -119,6 +121,7 @@ int main(void) {
         tilemapShader.setUniform2f("u_cameraPos", Game::cameraPos.x, Game::cameraPos.y);
         tileset.render(&tilemapShader);
 
+        glClear(GL_DEPTH_BUFFER_BIT);
         spriteShader.useShader();
         spriteShader.setUniform2f("u_cameraPos", Game::cameraPos.x, Game::cameraPos.y);
         Game::entityManager.renderEntities(&spriteShader);
