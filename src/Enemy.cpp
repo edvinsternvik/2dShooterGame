@@ -32,7 +32,7 @@ void Enemy::update(float deltaTime) {
 
 void Enemy::setPos(glm::vec2 newPos) {
     Entity::setPos(newPos);
-    boxCollider->updatePos(newPos, glm::vec2(1.0, 1.0));
+    boxCollider->updatePos(newPos, glm::vec2(0.9, 0.4));
 }
 
 void Enemy::setTarget(entityID target) {

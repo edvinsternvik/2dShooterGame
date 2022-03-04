@@ -49,7 +49,7 @@ void Player::update(float deltaTime) {
 
 void Player::setPos(glm::vec2 newPos) {
     Entity::setPos(newPos);
-    boxCollider->updatePos(getPos(), glm::vec2(1.0, 1.0));
+    boxCollider->updatePos(getPos(), glm::vec2(0.8, 0.3));
 }
 
 void Player::collisionCallback(BoxCollider* other) {
