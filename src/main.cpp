@@ -79,10 +79,7 @@ int main(void) {
     Game::collisionManager.setLayerCollision(1, 4, true);
     Game::collisionManager.setLayerCollision(2, 3, true);
 
-    std::shared_ptr<Sprite> playerSprite = std::make_shared<Sprite>("assets/sprites/player.png");
     entityID playerID = Game::entityManager.create<Player>();
-    Player* player = Game::entityManager.getEntity<Player>(playerID);
-    player->setSprite(playerSprite);
 
     Wall* wallBottom = Game::entityManager.getEntity<Wall>(Game::entityManager.create<Wall>(glm::vec2(0, -1), glm::vec2(20, 1)));
     Wall* wallLeft = Game::entityManager.getEntity<Wall>(Game::entityManager.create<Wall>(glm::vec2(-1, 0), glm::vec2(1, 12)));

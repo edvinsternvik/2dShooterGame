@@ -2,9 +2,27 @@
 #include "Input.h"
 #include "Game.h"
 #include "Bullet.h"
+#include "AnimatedSprite.h"
+
+enum class PlayerAnimationStates : unsigned int {
+    IdleForward = 0, IdleRight, IdleBack, IdleLeft,
+    RunForward,      RunRight,  RunBack,  RunLeft
+};
 
 Player::Player() 
     : dir(0.0), boxCollider(std::make_shared<BoxCollider>(true)), m_bulletSprite(std::make_shared<Sprite>("assets/sprites/bullet.png")), m_bulletCooldown(0), m_cameraShakeIntensity(0.0), m_timer(0.0) {
+
+    std::shared_ptr<Sprite> playerSprite = std::make_shared<AnimatedSprite>("assets/sprites/PlayerSpritesheet.png", 8, 8, std::vector<AnimationData>{
+        AnimationData(0, 0, {2.0, 0.1, 0.1, 0.1}), // Idle forward
+        AnimationData(0, 1, {2.0, 0.1, 0.1, 0.1}), // Idle right
+        AnimationData(0, 2, {2.0, 0.1, 0.1, 0.1}), // Idle back
+        AnimationData(0, 3, {2.0, 0.1, 0.1, 0.1}), // Idle left
+        AnimationData(4, 0, {0.1, 0.1, 0.1, 0.1}), // Run forward
+        AnimationData(4, 1, {0.1, 0.1, 0.1, 0.1}), // Run right
+        AnimationData(4, 2, {0.1, 0.1, 0.1, 0.1}), // Run back
+        AnimationData(4, 3, {0.1, 0.1, 0.1, 0.1}) // Run left
+    });
+    setSprite(playerSprite);
 
     boxCollider->collisionLayer = 1;
     boxCollider->setCollisionCallback(std::bind(&Player::collisionCallback, this, std::placeholders::_1));
@@ -12,13 +30,23 @@ Player::Player()
 }
 
 void Player::update(float deltaTime) {
-    float speed = 8.0;
-    glm::vec2 newPos = getPos();
-    if(Input::KeyDown(Key::KEY_W)) newPos.y += speed * deltaTime;
-    if(Input::KeyDown(Key::KEY_S)) newPos.y -= speed * deltaTime;
-    if(Input::KeyDown(Key::KEY_A)) newPos.x -= speed * deltaTime;
-    if(Input::KeyDown(Key::KEY_D)) newPos.x += speed * deltaTime;
+    AnimatedSprite* sprite = dynamic_cast<AnimatedSprite*>(getSprite());
 
+    float speed = 8.0;
+    glm::vec2 movement(0.0);
+    if(Input::KeyDown(Key::KEY_W)) movement.y += speed * deltaTime;
+    if(Input::KeyDown(Key::KEY_S)) movement.y -= speed * deltaTime;
+    if(Input::KeyDown(Key::KEY_A)) movement.x -= speed * deltaTime;
+    if(Input::KeyDown(Key::KEY_D)) movement.x += speed * deltaTime;
+
+    unsigned int facingOffset = sprite->getAnimationState() % 4; // 0: forward, 1: right, 2: back, 3:left
+    if(movement.x == 0.0 && movement.y == 0.0) sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::IdleForward) + facingOffset);
+    else if (movement.y > 0.0)                 sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::RunBack));
+    else if (movement.y < 0.0)                 sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::RunForward));
+    else if (movement.x > 0.0)                 sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::RunRight));
+    else if (movement.x < 0.0)                 sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::RunLeft));
+
+    glm::vec2 newPos = getPos() + movement;
     if(newPos.x < 0) newPos.x = 0;
     if(newPos.x > 19) newPos.x = 19;
     if(newPos.y < 0) newPos.y = 0;
@@ -41,9 +69,11 @@ void Player::update(float deltaTime) {
         bullet->boxCollider->collisionLayer = 3;
     }
 
+    dynamic_cast<AnimatedSprite*>(getSprite())->updateAnimationFrame(deltaTime);
+
     m_timer += deltaTime;
-    Game::cameraPos.x = m_cameraShakeIntensity * glm::sin(m_timer * 100.0);
-    Game::cameraPos.y = m_cameraShakeIntensity * glm::sin(m_timer * 100.0 + 100.0);
+    Game::cameraPos.x = m_cameraShakeIntensity * glm::sin(m_timer);
+    Game::cameraPos.y = m_cameraShakeIntensity * glm::sin(m_timer + 100.0);
     m_cameraShakeIntensity = std::max(0.0f, m_cameraShakeIntensity - deltaTime);
 }
 
