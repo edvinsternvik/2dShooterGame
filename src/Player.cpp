@@ -39,13 +39,6 @@ void Player::update(float deltaTime) {
     if(Input::KeyDown(Key::KEY_A)) movement.x -= speed * deltaTime;
     if(Input::KeyDown(Key::KEY_D)) movement.x += speed * deltaTime;
 
-    unsigned int facingOffset = sprite->getAnimationState() % 4; // 0: forward, 1: right, 2: back, 3:left
-    if(movement.x == 0.0 && movement.y == 0.0) sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::IdleForward) + facingOffset);
-    else if (movement.y > 0.0)                 sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::RunBack));
-    else if (movement.y < 0.0)                 sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::RunForward));
-    else if (movement.x > 0.0)                 sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::RunRight));
-    else if (movement.x < 0.0)                 sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::RunLeft));
-
     glm::vec2 newPos = getPos() + movement;
     if(newPos.x < 0) newPos.x = 0;
     if(newPos.x > 19) newPos.x = 19;
@@ -57,13 +50,34 @@ void Player::update(float deltaTime) {
     glm::vec2 cursorPosWorldSpace = glm::vec2(cursorPos.x, 1.0 - cursorPos.y) * glm::vec2(320 / 16.0, 180 / 16.0);
     glm::vec2 cursorDir = glm::normalize(cursorPosWorldSpace - (getPos() + glm::vec2(0.5, 0.5)));
 
+    if(movement.x == 0.0 && movement.y == 0.0) {
+        if(std::abs(cursorDir.x) > std::abs(cursorDir.y)) {
+            if(cursorDir.x > 0) sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::IdleRight));
+            else                sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::IdleLeft));
+        }
+        else {
+            if(cursorDir.y > 0) sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::IdleBack));
+            else                sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::IdleForward));
+        }
+    }
+    else {
+        if(std::abs(cursorDir.x) > std::abs(cursorDir.y)) {
+            if(cursorDir.x > 0) sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::RunRight));
+            else                sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::RunLeft));
+        }
+        else {
+            if(cursorDir.y > 0) sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::RunBack));
+            else                sprite->setAnimationState(static_cast<unsigned int>(PlayerAnimationStates::RunForward));
+        }
+    }
+
     if(m_bulletCooldown > 0) m_bulletCooldown -= deltaTime;
     if(Input::KeyDown(Key::KEY_SPACE) && m_bulletCooldown <= 0.0) {
         m_bulletCooldown = 0.05;
 
         Bullet* bullet = Game::entityManager.getEntity<Bullet>(Game::entityManager.create<Bullet>());
         bullet->setSprite(m_bulletSprite);
-        bullet->setPos(getPos() + glm::vec2(0.375, 0.375) + 0.75f * cursorDir);
+        bullet->setPos(getPos() + glm::vec2(0.375, 0.25) + 0.5f * cursorDir);
         bullet->dir = glm::atan(cursorDir.y, cursorDir.x);
         bullet->speed = 12.0;
         bullet->boxCollider->collisionLayer = 3;
