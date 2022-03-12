@@ -5,11 +5,13 @@ layout (location = 1) in vec2 a_textureCoords;
 uniform mat3 u_transformMatrix;
 uniform vec2 u_pos;
 uniform vec2 u_cameraPos;
+uniform vec2 u_textureOffset;
+uniform vec2 u_textureScale;
 
 out vec2 textureCoords;
 
 void main() {
-    textureCoords = a_textureCoords;
+    textureCoords = a_textureCoords * u_textureScale + u_textureOffset;
     
     vec3 pos = u_transformMatrix * vec3(a_pos, 1.0);
     pos += vec3(u_cameraPos, 0.0);

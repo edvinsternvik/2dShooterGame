@@ -19,7 +19,7 @@ Sprite::Sprite(const char* spriteFilepath)
     : Sprite(loadTextureFromFile(spriteFilepath)) {
 }
 
-void Sprite::render(glm::vec2 pos, float scale, float angle, Shader* shader) const {
+void Sprite::render(glm::vec2 pos, float scale, float angle, glm::vec2 textureOffset, glm::vec2 textureScale, Shader* shader) const {
     shader->useShader();
     spriteData->vao.bind();
 
@@ -49,12 +49,19 @@ void Sprite::render(glm::vec2 pos, float scale, float angle, Shader* shader) con
         shader->setUniformMat3("u_transformMatrix", transformMatrix);
     }
 
+    shader->setUniform2f("u_textureOffset", textureOffset.x, textureOffset.y);
+    shader->setUniform2f("u_textureScale", textureScale.x, textureScale.y);
+
     m_spriteTexture->bind();
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
     spriteData->vao.unbind();
 }
 
+void Sprite::render(glm::vec2 pos, float scale, float angle, Shader* shader) const {
+    render(pos, scale, angle, glm::vec2(0.0), glm::vec2(1.0), shader);
+}
+
 void Sprite::render(glm::vec2 pos, float scale, Shader* shader) const {
-    render(pos, scale, 0.0, shader);
+    render(pos, scale, 0.0, glm::vec2(0.0), glm::vec2(1.0), shader);
 }

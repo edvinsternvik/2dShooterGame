@@ -21,7 +21,7 @@ void Entity::setSprite(std::shared_ptr<Sprite> sprite) {
     m_entitySprite = sprite;
 }
 
-const Sprite* Entity::getSprite() const {
+Sprite* Entity::getSprite() const {
     return m_entitySprite.get();
 }
 

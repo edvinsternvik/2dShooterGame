@@ -12,7 +12,7 @@ public:
     void render(Shader* shader);
 
     void setSprite(std::shared_ptr<Sprite> sprite);
-    const Sprite* getSprite() const;
+    Sprite* getSprite() const;
     glm::vec2 getPos() const;
     virtual void setPos(glm::vec2 newPos);
     void markDestroyed();
