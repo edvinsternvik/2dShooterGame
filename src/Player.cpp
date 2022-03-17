@@ -10,7 +10,7 @@ enum class PlayerAnimationStates : unsigned int {
 };
 
 Player::Player() 
-    : dir(0.0), boxCollider(std::make_shared<BoxCollider>(true)), m_bulletSprite(std::make_shared<Sprite>("assets/sprites/bullet.png")), m_bulletCooldown(0), m_cameraShakeIntensity(0.0), m_timer(0.0) {
+    : dir(0.0), boxCollider(std::make_shared<BoxCollider>(true)), m_bulletSprite(std::make_shared<Sprite>("assets/sprites/bullet.png")), m_bulletCooldown(0) {
 
     std::shared_ptr<Sprite> playerSprite = std::make_shared<AnimatedSprite>("assets/sprites/PlayerSpritesheet.png", 8, 8, std::vector<AnimationData>{
         AnimationData(0, 0, {2.0, 0.1, 0.1, 0.1}), // Idle forward
@@ -84,11 +84,6 @@ void Player::update(float deltaTime) {
     }
 
     dynamic_cast<AnimatedSprite*>(getSprite())->updateAnimationFrame(deltaTime);
-
-    m_timer += deltaTime;
-    Game::cameraPos.x = m_cameraShakeIntensity * glm::sin(m_timer);
-    Game::cameraPos.y = m_cameraShakeIntensity * glm::sin(m_timer + 100.0);
-    m_cameraShakeIntensity = std::max(0.0f, m_cameraShakeIntensity - deltaTime);
 }
 
 void Player::setPos(glm::vec2 newPos) {
@@ -97,5 +92,5 @@ void Player::setPos(glm::vec2 newPos) {
 }
 
 void Player::collisionCallback(BoxCollider* other) {
-    m_cameraShakeIntensity = 0.01;
+    Game::camera.cameraShakeIntensity = std::max(Game::camera.cameraShakeIntensity, 0.016f);
 }

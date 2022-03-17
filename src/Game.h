@@ -1,11 +1,12 @@
 #pragma once
 #include "EntityManager.h"
 #include "CollisionManager.h"
+#include "Camera.h"
 
 namespace Game {
 
     inline EntityManager entityManager;
     inline CollisionManager collisionManager;
-    inline glm::vec2 cameraPos;
+    inline Camera camera;
 
 }

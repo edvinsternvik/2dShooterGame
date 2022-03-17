@@ -104,7 +104,7 @@ int main(void) {
     enemy3->setSprite(enemySprite);
     enemy3->setTarget(playerID);
 
-    Game::cameraPos = glm::vec2(0.0);
+    Game::camera.setCameraPos(glm::vec2(0.0));
 
     std::chrono::high_resolution_clock::time_point frameTimePoint = std::chrono::high_resolution_clock::now();
     std::chrono::high_resolution_clock::time_point prevFrameTimePoint;
@@ -117,14 +117,16 @@ int main(void) {
 
         Game::entityManager.updateEntities(deltaTime);
         Game::collisionManager.checkCollisions();
+        Game::camera.update(deltaTime);
 
+        glm::vec2 cameraPos = Game::camera.getCameraPos();
         tilemapShader.useShader();
-        tilemapShader.setUniform2f("u_cameraPos", Game::cameraPos.x, Game::cameraPos.y);
+        tilemapShader.setUniform2f("u_cameraPos", cameraPos.x, cameraPos.y);
         tileset.render(&tilemapShader);
 
         glClear(GL_DEPTH_BUFFER_BIT);
         spriteShader.useShader();
-        spriteShader.setUniform2f("u_cameraPos", Game::cameraPos.x, Game::cameraPos.y);
+        spriteShader.setUniform2f("u_cameraPos", cameraPos.x, cameraPos.y);
         Game::entityManager.renderEntities(&spriteShader);
 
         Input::update();

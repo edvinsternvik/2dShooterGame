@@ -19,6 +19,4 @@ public:
 private:
     std::shared_ptr<Sprite> m_bulletSprite;
     float m_bulletCooldown;
-    float m_cameraShakeIntensity;
-    float m_timer;
 };

@@ -42,4 +42,6 @@ void Enemy::setTarget(entityID target) {
 void Enemy::collisionCallback(BoxCollider* other) {
     if(other->collisionLayer == 3) health--;
     if(health <= 0) markDestroyed();
+
+    Game::camera.cameraShakeIntensity = std::max(Game::camera.cameraShakeIntensity, 0.01f);
 }
