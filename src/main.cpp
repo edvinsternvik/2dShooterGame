@@ -64,7 +64,7 @@ int main(void) {
     Tileset<320, 180> tileset(spritesheet);
     for(int x = 0; x < 320; x++) {
         for(int y = 0; y < 180; ++y) {
-            tileset.setSprite(x, y, 2);
+            tileset.setSprite(x, y, 3 + (std::rand() % 5));
         }
     }
 
