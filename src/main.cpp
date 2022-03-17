@@ -21,6 +21,7 @@
 #include "Bullet.h"
 #include "Game.h"
 #include "Enemy.h"
+#include "Shadow.h"
 
 std::string loadFile(const char* filename) {
     std::ifstream file(filename);
@@ -55,6 +56,8 @@ int main(void) {
     glfwSetCursorPosCallback(window, Input::cursorCallback);
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     Shader tilemapShader(loadFile("assets/shaders/tilemapVertexShader.glsl").c_str(), loadFile("assets/shaders/tilemapFragmentShader.glsl").c_str());
     Shader spriteShader(loadFile("assets/shaders/spriteVertexShader.glsl").c_str(), loadFile("assets/shaders/spriteFragmentShader.glsl").c_str());
@@ -80,6 +83,7 @@ int main(void) {
     Game::collisionManager.setLayerCollision(2, 3, true);
 
     entityID playerID = Game::entityManager.create<Player>();
+    Game::entityManager.create<Shadow>(playerID);
 
     Wall* wallBottom = Game::entityManager.getEntity<Wall>(Game::entityManager.create<Wall>(glm::vec2(0, -1), glm::vec2(20, 1)));
     Wall* wallLeft = Game::entityManager.getEntity<Wall>(Game::entityManager.create<Wall>(glm::vec2(-1, 0), glm::vec2(1, 12)));

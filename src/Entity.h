@@ -4,6 +4,8 @@
 
 class Shader;
 
+using entityID = uint32_t;
+
 class Entity {
 public:
     Entity();

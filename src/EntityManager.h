@@ -5,8 +5,6 @@
 
 class Shader;
 
-using entityID = uint32_t;
-
 class EntityManager {
 public:
     EntityManager();
