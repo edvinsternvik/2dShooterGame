@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Bullet.h"
 #include "AnimatedSprite.h"
+#include "ParticleEmiiter.h"
 
 enum class PlayerAnimationStates : unsigned int {
     IdleForward = 0, IdleRight, IdleBack, IdleLeft,
@@ -93,4 +94,6 @@ void Player::setPos(glm::vec2 newPos) {
 
 void Player::collisionCallback(BoxCollider* other) {
     Game::camera.cameraShakeIntensity = std::max(Game::camera.cameraShakeIntensity, 0.016f);
+    entityID particleEmitter = Game::entityManager.create<ParticleEmitter>(glm::uvec2(10, 50), glm::vec2(1.0, 3.0), glm::vec2(2.0, 5.0), glm::vec2(0.0, glm::radians(360.0f)), glm::vec2(1.0, 2.0), glm::vec2(0.0, 0.25), glm::vec2(0.4, 0.6));
+    Game::entityManager.getEntity(particleEmitter)->setPos(getPos() + glm::vec2(0.5, 0.5));
 }

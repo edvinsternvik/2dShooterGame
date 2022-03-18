@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "Game.h"
 #include "Bullet.h"
+#include "ParticleEmiiter.h"
 
 Enemy::Enemy()
     : m_bulletCooldown(0.0), m_targetEntity(0), boxCollider(std::make_shared<BoxCollider>(false)), m_bulletSprite(std::make_shared<Sprite>("assets/sprites/bullet.png")) {
@@ -40,8 +41,17 @@ void Enemy::setTarget(entityID target) {
 }
 
 void Enemy::collisionCallback(BoxCollider* other) {
-    if(other->collisionLayer == 3) health--;
-    if(health <= 0) markDestroyed();
+    if(other->collisionLayer == 3) {
+        health--;
+        if(health <= 0) {
+            entityID particleEmitter = Game::entityManager.create<ParticleEmitter>(glm::uvec2(50, 200), glm::vec2(3.0, 5.0), glm::vec2(2.0, 5.0), glm::vec2(0.0, glm::radians(360.0f)), glm::vec2(2.0, 5.0), glm::vec2(0.0, 0.8), glm::vec2(0.4, 0.6));
+            Game::entityManager.getEntity(particleEmitter)->setPos(getPos() + glm::vec2(0.5, 0.5));
 
-    Game::camera.cameraShakeIntensity = std::max(Game::camera.cameraShakeIntensity, 0.01f);
+            markDestroyed();
+        }
+
+        Game::camera.cameraShakeIntensity = std::max(Game::camera.cameraShakeIntensity, 0.01f);
+        entityID particleEmitter = Game::entityManager.create<ParticleEmitter>(glm::uvec2(10, 50), glm::vec2(1.0, 3.0), glm::vec2(2.0, 5.0), glm::vec2(0.0, glm::radians(360.0f)), glm::vec2(1.0, 2.0), glm::vec2(0.0, 0.25), glm::vec2(0.4, 0.6));
+        Game::entityManager.getEntity(particleEmitter)->setPos(getPos() + glm::vec2(0.5, 0.5));
+    }
 }
