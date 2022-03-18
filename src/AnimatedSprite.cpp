@@ -38,14 +38,14 @@ void AnimatedSprite::updateAnimationFrame(float deltaTime) {
     }
 }
 
-void AnimatedSprite::render(glm::vec2 pos, float scale, float angle, Shader* shader) const {
+void AnimatedSprite::render(glm::vec2 pos, float scale, float angle, float depthOffset, Shader* shader) const {
     glm::vec2 textureOffset = m_spritesheet.getOffset(getAnimationStateSpritesheetID() + m_animationFrame);
     glm::vec2 textureScale = m_spritesheet.getSpriteScale();
-    Sprite::render(pos, scale * textureScale.x, angle, textureOffset, textureScale, shader);
+    Sprite::render(pos, scale * textureScale.x, angle, depthOffset, textureOffset, textureScale, shader);
 }
 
 void AnimatedSprite::render(glm::vec2 pos, float scale, Shader* shader) const {
-    render(pos, scale, 0.0, shader);
+    render(pos, scale, 0.0, 0.0, shader);
 }
 
 unsigned int AnimatedSprite::getAnimationStateSpritesheetID() const {

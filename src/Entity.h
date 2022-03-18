@@ -11,13 +11,16 @@ public:
     Entity();
     virtual ~Entity();
     virtual void update(float deltaTime);
-    void render(Shader* shader);
+    virtual void render(Shader* shader);
 
     void setSprite(std::shared_ptr<Sprite> sprite);
     Sprite* getSprite() const;
     glm::vec2 getPos() const;
     virtual void setPos(glm::vec2 newPos);
     void markDestroyed();
+
+public:
+    float depthOffset;
 
 private:
     glm::vec2 m_pos;

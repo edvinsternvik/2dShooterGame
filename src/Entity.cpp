@@ -1,7 +1,7 @@
 #include "Entity.h"
 
 Entity::Entity()
-    : m_pos(0), m_destroyed(false) {
+    : depthOffset(0.0), m_pos(0), m_destroyed(false) {
 
 }
 
@@ -13,7 +13,7 @@ void Entity::update(float deltaTime) {
 
 void Entity::render(Shader* shader) {
     if(getSprite() != nullptr) {
-        getSprite()->render(getPos(), 1.0, shader);
+        getSprite()->render(getPos(), 1.0, 0.0, depthOffset, shader);
     }
 }
 

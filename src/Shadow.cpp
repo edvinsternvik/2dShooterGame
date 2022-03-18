@@ -6,6 +6,7 @@ std::shared_ptr<Sprite> Shadow::shadowSprite;
 Shadow::Shadow(entityID target) : m_target(target) {
     if(shadowSprite.get() == nullptr) shadowSprite = std::make_shared<Sprite>("assets/sprites/shadow.png");
     setSprite(shadowSprite);
+    depthOffset = -0.1;
 }
 
 void Shadow::update(float deltaTime) {

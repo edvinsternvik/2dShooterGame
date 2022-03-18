@@ -22,7 +22,7 @@ public:
     unsigned int getAnimationState() const;
     void updateAnimationFrame(float deltaTime);
 
-    virtual void render(glm::vec2 pos, float scale, float angle, Shader* shader) const override;
+    virtual void render(glm::vec2 pos, float scale, float angle, float depthOffset, Shader* shader) const override;
     virtual void render(glm::vec2 pos, float scale, Shader* shader) const override;
 
 private:
