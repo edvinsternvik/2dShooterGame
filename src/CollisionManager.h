@@ -14,6 +14,6 @@ public:
     bool checkLayerCollision(unsigned int layer1, unsigned int layer2) const;
 
 private:
-    std::vector<std::shared_ptr<BoxCollider>> m_colliders;
+    std::vector<std::weak_ptr<BoxCollider>> m_colliders;
     std::vector<std::vector<bool>> m_layers;
 };

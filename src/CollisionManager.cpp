@@ -11,24 +11,28 @@ std::shared_ptr<BoxCollider> CollisionManager::registerCollider(std::shared_ptr<
 }
 
 void CollisionManager::checkCollisions() {
-    for(std::size_t i = 0; i < m_colliders.size(); ++i) {
-        if(m_colliders[i].use_count() < 2) { // Remove collider if it is not referenced anywhere else
+    for(std::size_t i = 0; i < m_colliders.size();) {
+        if(m_colliders[i].expired()) { // Remove collider if it is not referenced anywhere else
             m_colliders[i] = m_colliders[m_colliders.size() - 1];
             m_colliders.pop_back();
+            continue;
         }
 
-        if(!m_colliders[i]->isStatic) {
+        std::shared_ptr<BoxCollider> collider = m_colliders[i].lock();
+        if(!collider->isStatic) {
             for(std::size_t j = 0; j < m_colliders.size(); ++j) {
-                if(m_colliders[j]->isStatic || j > i) {
-                    unsigned int layer1 = m_colliders[i]->collisionLayer;
-                    unsigned int layer2 = m_colliders[j]->collisionLayer;
-                    if(checkLayerCollision(layer1, layer2) && m_colliders[i]->isColliding(m_colliders[j].get())) {
-                        if(m_colliders[i]->m_collisionCallback) m_colliders[i]->m_collisionCallback(m_colliders[j].get());
-                        if(m_colliders[j]->m_collisionCallback) m_colliders[j]->m_collisionCallback(m_colliders[i].get());
+                std::shared_ptr<BoxCollider> other = m_colliders[j].lock();
+                if(other.get() != nullptr && (other->isStatic || j > i)) {
+                    unsigned int layer1 = collider->collisionLayer;
+                    unsigned int layer2 = other->collisionLayer;
+                    if(checkLayerCollision(layer1, layer2) && collider->isColliding(other.get())) {
+                        if(collider->m_collisionCallback) collider->m_collisionCallback(other.get());
+                        if(other->m_collisionCallback) other->m_collisionCallback(collider.get());
                     }
                 }
             }
         }
+        ++i;
     }
 }
 
