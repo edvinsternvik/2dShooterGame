@@ -90,16 +90,7 @@ int main(void) {
     Wall* wallTop = Game::entityManager.getEntity<Wall>(Game::entityManager.create<Wall>(glm::vec2(0, 11), glm::vec2(20, 1)));
     Wall* wallRight = Game::entityManager.getEntity<Wall>(Game::entityManager.create<Wall>(glm::vec2(20, 0), glm::vec2(1, 12)));
 
-    std::shared_ptr<Sprite> enemySprite = std::make_shared<Sprite>("assets/sprites/player.png");
-    Enemy* enemy1 = Game::entityManager.getEntity<Enemy>(Game::entityManager.create<Enemy>());
-    enemy1->setPos(glm::vec2(5, 5));
-    enemy1->setTarget(playerID);
-    Enemy* enemy2 = Game::entityManager.getEntity<Enemy>(Game::entityManager.create<Enemy>());
-    enemy2->setPos(glm::vec2(10, 2));
-    enemy2->setTarget(playerID);
-    Enemy* enemy3 = Game::entityManager.getEntity<Enemy>(Game::entityManager.create<Enemy>());
-    enemy3->setPos(glm::vec2(16, 4));
-    enemy3->setTarget(playerID);
+    float enemySpawnTimer = 5.0;
 
     Game::camera.setCameraPos(glm::vec2(0.0));
 
@@ -115,6 +106,20 @@ int main(void) {
         Game::entityManager.updateEntities(deltaTime);
         Game::collisionManager.checkCollisions();
         Game::camera.update(deltaTime);
+
+        enemySpawnTimer -= deltaTime;
+        if(enemySpawnTimer <= 0.0) {
+            enemySpawnTimer = 10.0;
+
+            int nEnemiesToSpawn = 3 + std::rand() % 10;
+            for(int i = 0; i < nEnemiesToSpawn; ++i) {
+                Enemy* enemy = Game::entityManager.getEntity<Enemy>(Game::entityManager.create<Enemy>());
+                float enemyPosX = 19.0 * (std::rand() / static_cast<float>(RAND_MAX));
+                float enemyPosY = 12.0 * (std::rand() / static_cast<float>(RAND_MAX));
+                enemy->setPos(glm::vec2(enemyPosX, enemyPosY));
+                enemy->setTarget(playerID);
+            }
+        }
 
         glm::vec2 cameraPos = Game::camera.getCameraPos();
         tilemapShader.useShader();

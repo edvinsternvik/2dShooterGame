@@ -14,7 +14,7 @@ Enemy::Enemy()
     boxCollider->collisionLayer = 2;
     boxCollider->setCollisionCallback(std::bind(&Enemy::collisionCallback, this, std::placeholders::_1));
     Game::collisionManager.registerCollider(boxCollider);
-    health = 20;
+    health = 10;
 
     std::shared_ptr<Sprite> enemySprite = std::make_shared<AnimatedSprite>("assets/sprites/zombieSpritesheet.png", 4, 4, std::vector<AnimationData>{
         AnimationData(0, 0, {0.3, 0.3, 0.3, 0.3}), // Run forward
