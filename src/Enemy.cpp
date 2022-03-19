@@ -17,10 +17,10 @@ Enemy::Enemy()
     health = 20;
 
     std::shared_ptr<Sprite> enemySprite = std::make_shared<AnimatedSprite>("assets/sprites/zombieSpritesheet.png", 4, 4, std::vector<AnimationData>{
-        AnimationData(0, 0, {0.1, 0.1, 0.1, 0.1}), // Run forward
-        AnimationData(0, 1, {0.1, 0.1, 0.1, 0.1}), // Run right
-        AnimationData(0, 2, {0.1, 0.1, 0.1, 0.1}), // Run back
-        AnimationData(0, 3, {0.1, 0.1, 0.1, 0.1})  // Run left
+        AnimationData(0, 0, {0.3, 0.3, 0.3, 0.3}), // Run forward
+        AnimationData(0, 1, {0.3, 0.3, 0.3, 0.3}), // Run right
+        AnimationData(0, 2, {0.3, 0.3, 0.3, 0.3}), // Run back
+        AnimationData(0, 3, {0.3, 0.3, 0.3, 0.3})  // Run left
     });
     setSprite(enemySprite);
 }
@@ -40,6 +40,10 @@ void Enemy::update(float deltaTime) {
             else                  sprite->setAnimationState(static_cast<unsigned int>(EnemyAnimationStates::RunForward));
         }
 
+        glm::vec2 targetPos = target->getPos() - dirToPlayer * 0.6f;
+        glm::vec2 targetDir = glm::normalize(targetPos - getPos());
+        setPos(getPos() + targetDir * deltaTime);
+
         if(m_bulletCooldown > 0.0) m_bulletCooldown -= deltaTime;
         else {
             Bullet* bullet = Game::entityManager.getEntity<Bullet>(Game::entityManager.create<Bullet>());
@@ -55,6 +59,7 @@ void Enemy::update(float deltaTime) {
 
     }
 
+    dynamic_cast<AnimatedSprite*>(getSprite())->updateAnimationFrame(deltaTime);
 }
 
 void Enemy::setPos(glm::vec2 newPos) {
@@ -67,7 +72,7 @@ void Enemy::setTarget(entityID target) {
 }
 
 void Enemy::collisionCallback(BoxCollider* other) {
-    if(other->collisionLayer == 3) {
+    if(other->collisionLayer == 3) { // Bullets
         health--;
         if(health <= 0) {
             entityID particleEmitter = Game::entityManager.create<ParticleEmitter>(glm::uvec2(50, 200), glm::vec2(3.0, 5.0), glm::vec2(2.0, 5.0), glm::vec2(0.0, glm::radians(360.0f)), glm::vec2(2.0, 5.0), glm::vec2(0.0, 0.8), glm::vec2(0.4, 0.6));
