@@ -93,15 +93,12 @@ int main(void) {
     std::shared_ptr<Sprite> enemySprite = std::make_shared<Sprite>("assets/sprites/player.png");
     Enemy* enemy1 = Game::entityManager.getEntity<Enemy>(Game::entityManager.create<Enemy>());
     enemy1->setPos(glm::vec2(5, 5));
-    enemy1->setSprite(enemySprite);
     enemy1->setTarget(playerID);
     Enemy* enemy2 = Game::entityManager.getEntity<Enemy>(Game::entityManager.create<Enemy>());
     enemy2->setPos(glm::vec2(10, 2));
-    enemy2->setSprite(enemySprite);
     enemy2->setTarget(playerID);
     Enemy* enemy3 = Game::entityManager.getEntity<Enemy>(Game::entityManager.create<Enemy>());
     enemy3->setPos(glm::vec2(16, 4));
-    enemy3->setSprite(enemySprite);
     enemy3->setTarget(playerID);
 
     Game::camera.setCameraPos(glm::vec2(0.0));
