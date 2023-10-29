@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <array>
 
 class GLFWwindow;
 
@@ -141,7 +142,7 @@ public:
     static void update();
 
 private:
-    static bool m_keys[KEY_MAX];
-    static bool m_keysPrev[KEY_MAX];
+    static std::array<bool, KEY_MAX> m_keys;
+    static std::array<bool, KEY_MAX> m_keysPrev;
     static glm::vec2 m_cursorPos;
 };

@@ -2,8 +2,8 @@
 #include <GLFW/glfw3.h>
 #include <algorithm>
 
-bool Input::m_keys[KEY_MAX] = {};
-bool Input::m_keysPrev[KEY_MAX] = {};
+std::array<bool, KEY_MAX> Input::m_keys;
+std::array<bool, KEY_MAX> Input::m_keysPrev;
 glm::vec2 Input::m_cursorPos = {};
 
 bool Input::KeyDown(Key key) {
@@ -32,5 +32,5 @@ void Input::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
 }
 
 void Input::update() {
-    std::copy(std::begin(m_keys), std::end(m_keys), std::begin(m_keysPrev));
+    m_keysPrev = m_keys;
 }

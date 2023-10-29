@@ -1,12 +1,12 @@
 [submodule "vendor/glew/glew"]
 	path = vendor/glew/glew
-	url = git@github.com-RedE01:RedE01/glew.git
+	url = git@github.com:edvinsternvik/glew.git
 [submodule "vendor/glfw/glfw"]
 	path = vendor/glfw/glfw
-	url = git@github.com-RedE01:glfw/glfw.git
+	url = git@github.com:glfw/glfw.git
 [submodule "vendor/glm/glm"]
 	path = vendor/glm/glm
-	url = git@github.com-RedE01:g-truc/glm.git
+	url = git@github.com:g-truc/glm.git
 [submodule "vendor/stb"]
 	path = vendor/stb
-	url = git@github.com-RedE01:nothings/stb.git
+	url = git@github.com:nothings/stb.git
